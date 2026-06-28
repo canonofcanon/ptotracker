@@ -140,9 +140,15 @@ I've already filled in your guesses. The first time you open `/admin`, you'll se
 - **Ryan Cain** — 0 PTO days
 - **Lucas Hibdon** — 10 PTO days
 
-You can change any number, add new people, and set vacation days right there on
-the review page — just edit the boxes and click **Save balances**. Everyone
-starts at 0 vacation until you set it.
+You can change any number, add new people, and set the third "Other" bucket
+right there on the review page — just edit the boxes and click **Save balances**.
+Everyone starts at 0 in "Other" until you set it.
+
+The categories are now **PTO**, **Comp**, and **Other** (PTO and vacation are the
+same bucket for you, so there's just PTO). The team page also has an **"Other"**
+name option — anyone not in the list yet (like a new hire) can pick it and put
+their name in the note, so a request never gets stuck just because the roster is
+behind.
 
 ---
 
