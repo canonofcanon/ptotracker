@@ -82,7 +82,7 @@
 
   <div id="gate" class="card gate" style="max-width:380px">
     <label for="pw">Admin password</label>
-    <input id="pw" type="password" autocomplete="off" placeholder="Christian only" />
+    <input id="pw" type="password" autocomplete="off" placeholder="Manager password" />
     <div class="row" style="margin-top:14px"><button class="btn btn-primary" id="unlock">Unlock</button></div>
     <div class="err" id="gateErr"></div>
   </div>
@@ -93,7 +93,7 @@
 
     <h2>Balances</h2>
     <div class="card">
-      <table id="balTable"><thead><tr><th>Name</th><th>PTO</th><th>Comp</th><th>Vacation</th></tr></thead><tbody></tbody></table>
+      <table id="balTable"><thead><tr><th>Name</th><th>PTO</th><th>Comp</th><th>Other</th></tr></thead><tbody></tbody></table>
       <div class="balbar">
         <button class="btn btn-primary" id="saveBal">Save balances</button>
         <span class="err" id="balErr" style="margin:0"></span>
@@ -112,7 +112,7 @@
 
 <script>
   const $ = (id) => document.getElementById(id);
-  const BUCKETS = ["pto", "comp", "vacation"];
+  const BUCKETS = ["pto", "comp", "other"];
   let pw = sessionStorage.getItem("pto_admin") || "";
   let state = { requests: [], balances: {} };
 
