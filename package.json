@@ -1,0 +1,10 @@
+{
+  "name": "surtzmedia-pto",
+  "version": "1.0.0",
+  "description": "Internal time-off request and balance tracker for SurtzMedia.",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

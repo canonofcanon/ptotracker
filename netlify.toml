@@ -1,0 +1,17 @@
+# Netlify configuration for the SurtzMedia time-off tracker.
+# No build step: static files in /public, serverless functions in /netlify/functions.
+
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+# Pretty routes so the short.io link can point at a clean path.
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
