@@ -1,5 +1,5 @@
 // netlify/functions/admin.js
-// Christian-only function behind the admin password. Everything is one POST
+// Manager-only function behind the admin password. Everything is one POST
 // with an "action" so the review page makes a single kind of call.
 //
 //   list        -> { requests, balances }
@@ -12,7 +12,7 @@
 
 import { getStore } from "@netlify/blobs";
 
-const BUCKETS = ["pto", "comp", "vacation"];
+const BUCKETS = ["pto", "comp", "other"];
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -65,7 +65,9 @@ export default async (req) => {
     if (decision === "approve") {
       const bucket = reqItem.parsed.type;
       const days = Number(reqItem.parsed.days);
-      if (BUCKETS.includes(bucket) && Number.isFinite(days)) {
+      // Only deduct for people who already have a balance on file. A request
+      // from the catch-all "Other" name is just approved, no balance touched.
+      if (balances[reqItem.name] && BUCKETS.includes(bucket) && Number.isFinite(days)) {
         balances[reqItem.name] = cleanBuckets(balances[reqItem.name]);
         balances[reqItem.name][bucket] = Number(
           (balances[reqItem.name][bucket] - days).toFixed(2)

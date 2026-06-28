@@ -10,14 +10,17 @@
 
 import { getStore } from "@netlify/blobs";
 
-const BUCKETS = ["pto", "comp", "vacation"];
+const BUCKETS = ["pto", "comp", "other"];
+
+// A catch-all name so someone not yet in the system can still submit.
+const CATCHALL = "Other";
 
 // Seeded once if the ledger doesn't exist yet. Edit balances later from the
 // review page, not here.
 const DEFAULT_BALANCES = {
-  "Ryan Howey": { pto: 7, comp: 2, vacation: 0 },
-  "Ryan Cain": { pto: 0, comp: 0, vacation: 0 },
-  "Lucas Hibdon": { pto: 10, comp: 0, vacation: 0 },
+  "Ryan Howey": { pto: 7, comp: 2, other: 0 },
+  "Ryan Cain": { pto: 0, comp: 0, other: 0 },
+  "Lucas Hibdon": { pto: 10, comp: 0, other: 0 },
 };
 
 function json(body, status = 200) {
@@ -58,7 +61,7 @@ Their message: """${message}"""
 Return ONLY a JSON object, no prose and no markdown fences, with these keys:
 - "days": number of working days requested (use 0.5 for half days; null if you truly cannot tell)
 - "dates": a short human-readable date or range, e.g. "Thu Jul 16 – Fri Jul 17" (empty string if none given)
-- "type": one of "pto", "comp", "vacation" — default to the selected category unless the message clearly says otherwise
+- "type": one of "pto", "comp", "other" — default to the selected category unless the message clearly says otherwise
 - "summary": one short plain sentence describing the request
 - "needs_review": true if the days or dates are ambiguous or missing, otherwise false`;
 
@@ -137,7 +140,9 @@ export default async (req) => {
 
   if (req.method === "GET") {
     const balances = await getBalances(store);
-    return json({ roster: Object.keys(balances) });
+    const roster = Object.keys(balances).filter((n) => n !== CATCHALL);
+    roster.push(CATCHALL); // always last
+    return json({ roster });
   }
 
   if (req.method !== "POST") {
@@ -154,11 +159,11 @@ export default async (req) => {
   const { password, name, type, message } = body;
 
   if (!password || password !== process.env.SUBMIT_PASSWORD) {
-    return json({ error: "That password isn't right. Check with Christian." }, 401);
+    return json({ error: "That password isn't right. Check with whoever shared this link." }, 401);
   }
 
   const balances = await getBalances(store);
-  if (!name || !balances[name]) {
+  if (!name || (!balances[name] && name !== CATCHALL)) {
     return json({ error: "Pick your name from the list." }, 400);
   }
   if (!message || message.trim().length < 3) {
